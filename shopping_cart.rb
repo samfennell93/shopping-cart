@@ -27,11 +27,13 @@ RSpec.describe Basket do
     subject { described_class.new }
 
     let(:ting) { double('ting') }
+    let(:doritos) { double('doritos') }
 
     it 'adds items to the basket' do
       subject.add_item ting
+      subject.add_item doritos
 
-      expect(subject.items).to eq [ting]
+      expect(subject.items).to eq [ting, doritos]
     end
   end
 end
