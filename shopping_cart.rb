@@ -18,7 +18,12 @@ class Basket
   attr_reader :items
 
   def add_item(item)
-    items << item
+    @items << item
+  end
+
+  def remove_item(item)
+    first_item_index = items.find_index(item)
+    items.delete_at first_item_index
   end
 
   def total
@@ -47,6 +52,17 @@ RSpec.describe Basket do
     it 'adds items to the basket' do
       subject.add_item ting
       subject.add_item doritos
+
+      expect(subject.items).to eq [ting, doritos]
+    end
+  end
+
+  describe '#remove_item' do
+    it 'removes only one item of that type from the basket' do
+      subject.add_item ting
+      subject.add_item ting
+      subject.add_item doritos
+      subject.remove_item ting
 
       expect(subject.items).to eq [ting, doritos]
     end
