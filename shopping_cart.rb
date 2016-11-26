@@ -6,29 +6,44 @@
 # add_item Ting
 # total == £3.15
 
+require 'rspec'
 require_relative 'spec/spec_helper'
+require 'bigdecimal'
 
 class Basket
   def initialize
     @items = []
   end
 
+  attr_reader :items
+
   def add_item(item)
-    @items << item
+    items << item
   end
 
-  def items
-    @items
+  def total
+    items.reduce(0) do |acc, item|
+      acc += item.price
+    end
   end
 end
 
 RSpec.describe Basket do
+  subject { described_class.new }
+
+  let(:doritos) { double('doritos', price: BigDecimal('0.60')) }
+  let(:ting) { double('ting', price: BigDecimal('0.95')) }
+
+  describe '#total' do
+    it 'returns a sum of all the items in the basket' do
+      subject.add_item doritos
+      subject.add_item ting
+
+      expect(subject.total).to eq 1.55
+    end
+  end
+
   describe '#add_item' do
-    subject { described_class.new }
-
-    let(:ting) { double('ting') }
-    let(:doritos) { double('doritos') }
-
     it 'adds items to the basket' do
       subject.add_item ting
       subject.add_item doritos
